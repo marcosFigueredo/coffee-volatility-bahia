@@ -1,0 +1,3 @@
+﻿source,datasets,reason,next_step,url
+CME Group,Soybean futures official historical settlements / volume / open interest,"Histórico oficial completo normalmente depende de DataMine/produto de dados, conta ou licença. O script usa Yahoo como fallback para série de mercado.",Obter acesso CME DataMine/API e exportar os contratos/settlements necessários.,https://www.cmegroup.com/market-data/datamine-historical-data.html
+ICE Data Services,"Cocoa, Coffee C e Cotton No. 2 official historical futures",Históricos oficiais completos e dados por contrato/volume/open interest podem exigir serviço/licença de dados.,Obter acesso ICE Data Services/Connect e exportar séries por contrato; usar Yahoo apenas como fallback exploratório.,https://www.ice.com/market-data

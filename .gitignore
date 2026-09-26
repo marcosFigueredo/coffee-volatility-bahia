@@ -1,0 +1,52 @@
+# Python environments and caches
+.mlf/
+__pycache__/
+*.pyc
+
+# Tool / assistant folders
+.claude/
+.qodo/
+.remember/
+docs/superpowers/
+
+# Google Drive / OS files
+desktop.ini
+Thumbs.db
+
+# Large regenerable prediction files (> 20 MB; rebuilt by 04_ and 05_ scripts)
+dados_commodities_bahia/ml_predictions_cafe.csv
+dados_commodities_bahia/baseline_predictions_cafe.csv
+
+# Download caches and run logs
+dados_commodities_bahia/_cache/
+dados_commodities_bahia/*.log
+
+# Old backups and unrelated drafts
+backup_validacao_20260909/
+artigo_lppls_ml_cafe_bahia/
+
+# Third-party article PDFs (copyrighted)
+references/*.pdf
+
+# LaTeX build artefacts
+els-cas-templates/*.aux
+els-cas-templates/*.bbl
+els-cas-templates/*.blg
+els-cas-templates/*.log
+els-cas-templates/*.out
+els-cas-templates/*.abs
+els-cas-templates/*.fls
+els-cas-templates/*.fdb_latexmk
+els-cas-templates/*.xdv
+els-cas-templates/*.synctex*
+els-cas-templates/tmp/
+els-cas-templates/thumbnails/
+
+# Elsevier template samples (not part of the manuscript)
+els-cas-templates/cas-sc-sample.*
+els-cas-templates/cas-dc-sample.*
+els-cas-templates/cas-dc-template.tex
+els-cas-templates/doc/
+
+# Per-series intermediate prediction runs (regenerable)
+dados_commodities_bahia/ml_series_runs/

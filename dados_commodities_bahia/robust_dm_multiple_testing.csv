@@ -1,0 +1,10 @@
+comparison,loss,n,sig,fav,bh_sig,bh_fav,holm_sig,holm_fav
+E1 vs E2/E3/E4,AE,81,54,13,49,11,30,2
+E1 vs E2/E3/E4,QLIKE,81,10,0,9,0,0,0
+E1 vs E2/E3/E4,SE,81,53,8,46,6,22,3
+"ML vs GARCH(1,1)",AE,108,94,88,93,87,77,73
+"ML vs GARCH(1,1)",QLIKE,108,65,0,59,0,16,0
+"ML vs GARCH(1,1)",SE,108,68,40,60,40,39,32
+ML vs HAR-RV,AE,108,94,0,87,0,69,0
+ML vs HAR-RV,QLIKE,108,43,0,37,0,11,0
+ML vs HAR-RV,SE,108,99,0,96,0,48,0

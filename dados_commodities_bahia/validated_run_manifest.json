@@ -1,0 +1,25 @@
+{
+  "python": "3.12.10",
+  "versions": {
+    "numpy": "2.5.2",
+    "pandas": "3.0.5",
+    "arch": "8.0.0",
+    "scikit-learn": "1.9.0",
+    "lightgbm": "4.7.0",
+    "xgboost": "3.4.1"
+  },
+  "sha256": {
+    "03_build_master_dataset.py": "1167d0b494db57c7c8a771c5cc1378b4e92bd114ddc973d22277146ccf94448c",
+    "04_baselines_garch_har.py": "10dd0c2f8c3efea0346122a5cb0fc055bbda05363e6b09fb3fc65e646db948cd",
+    "05_ml_experiments.py": "1c6382baa834a489a24917b20021c031f0b8fe5555a63f55e16a85bf267b0e2a",
+    "temporal_validation.py": "09a66d7708e73ad40df5bee4b5f374c3ac124bccb7584780cfb15e59f46c180f",
+    "07_compare_validated.py": "cb2c6ee7e8a762e034140beb738474d4fdc074ef3214d17f58afbee732f38314",
+    "master_dataset_cafe.csv": "df19d0288abf757974802160bf6a7fcfa4cfda70b2f9429e8c053b80451be478"
+  },
+  "refit_cutoff": "January 1, strictly before cutoff",
+  "origin": "after close at t; target next h observed returns",
+  "qlike_variance_floor": 0.0001,
+  "egarch_seed": 42,
+  "n_prediction_rows": 563310,
+  "n_common_primary_rows": 525756
+}
