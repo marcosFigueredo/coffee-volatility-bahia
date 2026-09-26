@@ -1,0 +1,7 @@
+Highlights
+
+- Machine learning does not beat GARCH and HAR benchmarks in local coffee markets
+- Global commodity signals add only marginal gains to local volatility forecasts
+- Financial signals hurt forecasts in calm regimes but help when volatility is high
+- Rankings are robust to zero-variance targets caused by infrequent price updates
+- High SHAP importance of interest rates does not translate into predictive value

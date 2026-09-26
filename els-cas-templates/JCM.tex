@@ -48,42 +48,19 @@
 \def\textpagefraction{.001}
 
 % Short title
-\shorttitle{Local coffee price volatility forecasting in Bahia}
+\shorttitle{Volatility forecasting in thin local coffee markets}
 
 % Short author
-\shortauthors{Figueredo et~al.}
+\shortauthors{Anonymized manuscript}
 
 % Main title of the paper
-\title [mode = title]{Forecasting Local Coffee Price Volatility in Bahia with Cross-Commodity and Financial Information}
+\title [mode = title]{Forecasting volatility in thin local coffee markets: Do global commodity and financial signals help?}
 
-\author[1]{Marcos Batista Figueredo}
-\cormark[1]
-\author[1]{Alarcon Matos de Oliveira}
-\author[1]{Alexandre do Nascimento Silva}
-\author[1]{Roberto Luiz Souza Monteiro}
-\author[2]{Thiago Barros Murarri}
-\author[1]{Eugenio Rocha da Silva Junior}
-\author[1]{Uanderson Lima Santos}
-\author[1]{José Gileá de Souza}
-\author[1]{Marcos Antônio Vanderlei Silva}
-
-\affiliation[1]{organization={Universidade do Estado da Bahia},
-            state={Bahia},
-            country={Brazil}}
-
-\affiliation[2]{organization={Universidade SENAI-CIMATEC},
-            state={Bahia},
-            country={Brazil}}
-
-% Corresponding author text
-\cortext[1]{Corresponding author}
-
-% For a title note without a number/mark
-%\nonumnote{}
+% Author information removed for double-anonymized review (see the separate title page).
 
 % Here goes the abstract
 \begin{abstract}
-Coffee price volatility exposes producers, cooperatives, traders and financial institutions in regional markets to income and risk-management uncertainty, yet evidence on forecasting volatility in local Brazilian coffee markets is scarce. This study evaluates whether cross-commodity and financial information improves out-of-sample forecasts of future volatility for three local coffee price series in Bahia, Brazil: Arabica in Vitória da Conquista and Luís Eduardo Magalhães and Conilon in Eunápolis (14,126 observations, 2001--2026). Six research questions compare econometric and machine-learning models, isolate the contribution of each information block, and examine regime dependence and the drivers of the forecasts. GARCH(1,1) and HAR-RV benchmarks are compared with Random Forest, XGBoost and LightGBM estimated on four nested information sets under an expanding-window design with purged labels, at horizons of one, five and twenty observations. Forecasts are evaluated with QLIKE, MAE and RMSE, Diebold--Mariano tests with the Harvey--Leybourne--Newbold correction and multiple-testing adjustments, ex-ante volatility regimes and SHAP. The econometric benchmarks are not beaten: GARCH yields the lowest QLIKE and HAR-RV the lowest MAE and RMSE at all horizons, a ranking that is robust to the treatment of the many zero-variance targets produced by infrequent price updates. Cross-commodity information yields marginal gains restricted to Random Forest. Financial information worsens forecasts on average, but its value is regime dependent: it degrades forecasts in calm periods and adds information when volatility is high. The high SHAP importance of interest-rate levels does not translate into out-of-sample gains. The findings support loss-specific, benchmarked model selection in local agricultural risk forecasting.
+Local physical commodity markets in emerging economies are thinly traded and update prices infrequently, yet they are increasingly exposed to global commodity and financial shocks. This paper examines whether global commodity and financial information improves out-of-sample forecasts of price volatility in three local coffee markets in Bahia, Brazil: Arabica in Vitória da Conquista and Luís Eduardo Magalhães and Conilon in Eunápolis (2001--2026). GARCH and heterogeneous autoregressive (HAR) benchmarks are compared with random forest and gradient-boosting models estimated on nested information sets that add cross-commodity and financial predictors to own-market history, under an expanding-window design with purged labels at horizons of one, five and twenty observations. Forecasts are compared with the quasi-likelihood (QLIKE), absolute and squared losses, Diebold--Mariano tests with multiple-testing adjustments and ex-ante volatility regimes. The econometric benchmarks are not beaten: GARCH attains the lowest QLIKE and the HAR model the lowest absolute and squared errors at all horizons, and no machine-learning configuration is significantly better than the HAR benchmark under any loss. This ranking is robust to the treatment of the zero-variance targets created by infrequent price updates. Cross-commodity information yields marginal gains, few of which survive multiple-testing correction. Financial information worsens forecasts on average, but its value is regime dependent: it raises mean absolute errors by 20--27\% in calm regimes and lowers them by up to 7.6\% when volatility is high. The transmission of financial signals to local physical coffee markets is therefore intermittent, and simple econometric benchmarks should anchor risk forecasting in thin commodity markets.
 \end{abstract}
 
 % Use if graphical abstract is present
@@ -91,19 +68,12 @@ Coffee price volatility exposes producers, cooperatives, traders and financial i
 %\includegraphics{}
 %\end{graphicalabstract}
 
-% Research highlights
-\begin{highlights}
-\item GARCH and HAR-RV beat machine learning for local coffee volatility in Bahia.
-\item Cross-commodity information yields only marginal, model-specific gains.
-\item Financial information hurts forecasts in calm regimes but helps in volatile ones.
-\item Rankings are robust to zero-variance targets from infrequent price updates.
-\item High SHAP importance of interest rates does not imply predictive value.
-\end{highlights}
+% Highlights are submitted as a separate file (JCM_highlights.txt).
 
 % Keywords
 % Each keyword is seperated by \sep
 \begin{keywords}
-coffee price volatility \sep agricultural commodities \sep machine learning \sep temporal validation \sep Brazil \sep risk forecasting
+Volatility forecasting \sep Coffee \sep Local markets \sep Financialization \sep Price transmission \sep Machine learning \sep Brazil
 \end{keywords}
 
 \maketitle
@@ -112,9 +82,11 @@ coffee price volatility \sep agricultural commodities \sep machine learning \sep
 \section{Introduction}
 \label{sec:introduction}
 
-Agricultural price volatility is an important source of risk for producers, cooperatives, exporters, financial institutions and policymakers~\citep{Manogna2025HybridVolatility,Brun2026GARCHCoffeeRisk}. In the case of coffee, sharp price swings can affect producers' income, marketing decisions, the need for financial hedging and production planning~\citep{Zhang2025ClimateRealizedVolatility,Chaovanapoonphol2023CoffeeGARCHX,Fahmi2023LocalCoffeePolicy}. Moreover, the growing integration of agricultural, foreign-exchange, energy and financial markets means that coffee price dynamics are shaped not only by local supply and demand conditions but also by shocks originating in other markets~\citep{Nassani2025FinancialIntegration,manogna2025dynamicnexus}.
+Local physical commodity markets are where global price shocks reach producers. In emerging economies, many of these markets are thinly traded and report prices infrequently, yet they are increasingly exposed to international commodity prices, exchange rates and financial conditions~\citep{Nassani2025FinancialIntegration,manogna2025dynamicnexus}. For coffee, sharp price swings affect producers' income, marketing decisions, hedging needs and production planning~\citep{Zhang2025ClimateRealizedVolatility,Chaovanapoonphol2023CoffeeGARCHX,Fahmi2023LocalCoffeePolicy}, and volatility is an important source of risk for producers, cooperatives, exporters, lenders and policymakers~\citep{Manogna2025HybridVolatility,Brun2026GARCHCoffeeRisk}.
 
-Agricultural commodity prices~\citep{hamulczuk2026price,Manogna2025HybridVolatility,Jin2026,kupabado2025price,martin2015finance} display features typical of financial markets~\citep{105033937791}, such as volatility clustering~\citep{S259000562600007X}, heavy-tailed distributions~\citep{S0957417426013771}, nonlinearity and structural breaks. GARCH-family models~\citep{S0165188925000946,105013192554,105027925489} remain widely used to represent conditional variance and volatility persistence, including in coffee-specific studies. GARCH models with exogenous variables show that factors related to production, international trade and competing producer countries can significantly alter coffee volatility \citep{Chaovanapoonphol2023CoffeeGARCHX}. However, recent evidence also indicates that traditional GARCH specifications may have limitations in periods of instability and in situations characterized by asymmetry and extreme risk \citep{Brun2026GARCHCoffeeRisk}.
+Two strands of the commodity markets literature suggest why external information might help forecast local volatility. The spatial price analysis literature shows that prices in connected markets are linked through trade and arbitrage, although transmission to local markets is often incomplete, delayed or asymmetric~\citep{FacklerGoodwin2001}; studies of Brazilian agricultural markets point in the same direction~\citep{84894858898,84944902729,105014742301}. The financialization literature, in turn, shows that the growing participation of financial investors has strengthened the co-movement between commodity and financial markets~\citep{TangXiong2012,ChengXiong2014,kupabado2025price,martin2015finance}. Whether these channels reach thinly traded local spot markets, and whether they carry predictive information for local volatility, remains an open question.
+
+Agricultural commodity prices~\citep{hamulczuk2026price,Manogna2025HybridVolatility,Jin2026} display the stylized features of financial returns~\citep{Cont2001}, such as volatility clustering, heavy-tailed distributions, nonlinearity and structural breaks~\citep{S0957417426013771}. GARCH-family models~\citep{Bollerslev1986GARCH,S0165188925000946} remain widely used to represent conditional variance and volatility persistence, including in coffee-specific studies. GARCH models with exogenous variables show that factors related to production, international trade and competing producer countries can significantly alter coffee volatility \citep{Chaovanapoonphol2023CoffeeGARCHX}. However, recent evidence also indicates that traditional GARCH specifications may have limitations in periods of instability and in situations characterized by asymmetry and extreme risk \citep{Brun2026GARCHCoffeeRisk}.
 
 In parallel, machine-learning methods have been used to model nonlinear relationships and complex interactions in agricultural time series~\citep{105033941897,Zhang2025ClimateRealizedVolatility,Jin2024CoffeePriceML}. Recent studies apply hybrid models that combine neural networks and econometric models, obtaining gains over stand-alone specifications in certain markets and horizons \citep{Manogna2025HybridVolatility,S246822762500420X}. Other studies show that including exogenous variables, such as climatic conditions and economic indicators, can improve agricultural price forecasts relative to univariate models \citep{Nayak2024ExogenousAgricultural,Zhang2025ClimateRealizedVolatility,Pandit2024CEEMDANTDNN}. Recent reviews, however, stress that results depend on the market analysed, the data frequency, the forecast horizon, the model specification and the validation strategy \citep{Guindani2024AgriculturalForecasting}.
 
@@ -124,7 +96,7 @@ Despite these advances, three important limitations remain. First, most existing
 
 Recent studies indicate that volatility predictability in regional agricultural markets may increase when the model incorporates blocks of exogenous and spatial-transmission information, rather than price history alone~\citep{S2211912425000598}. In particular, climate, geopolitical shocks, supply-chain pressure, exchange rates, energy, trade policy and local information or market-flow signals repeatedly appear as variables that improve agricultural volatility forecasts~\citep{S0275531925003897,105028567345,85215790860,105017333758}.
 
-At the same time, local policies may have limited capacity to control swings driven by external forces of supply, demand and market integration \citep{Fahmi2023LocalCoffeePolicy,AliagaMiranda2026CoffeeShocks}. In Brazil, and particularly in the state of Bahia, quantitative evidence on forecasting the volatility of local coffee prices using information from the local market, other agricultural commodities and financial markets simultaneously remains scarce~\citep{85215790860,105014742301,84894858898,84944902729}.
+At the same time, local policies may have limited capacity to control swings driven by external forces of supply, demand and market integration \citep{Fahmi2023LocalCoffeePolicy,AliagaMiranda2026CoffeeShocks}. In Brazil, and particularly in the state of Bahia, quantitative evidence on forecasting the volatility of local coffee prices using information from the local market, other agricultural commodities and financial markets simultaneously remains scarce~\citep{85215790860,105014742301}.
 
 A descriptive inspection of the series shows that the intensity of risk varies substantially across local markets. Figure~\ref{fig:intro_volatility} shows the monthly 90th percentile of historical volatility computed over a twenty-observation window between 2019 and 2024. The values were computed from SEAGRI-BA quotations, and the gaps correspond to months without sufficient observations. The highlighted episode between June and August 2021 reaches approximately 56\% in the Arabica series of Vitória da Conquista, while the corresponding peaks remain close to 31\% in Luís Eduardo Magalhães and 11\% in Eunápolis. This heterogeneity provides the empirical motivation to investigate whether local, cross-commodity and financial information improves the forecasting of future volatility.
 
@@ -154,7 +126,7 @@ The questions are treated as an out-of-sample empirical evaluation, without pres
 
 The empirical design compares GARCH(1,1) and HAR-RV with Random Forest, XGBoost and LightGBM, estimated on four nested information sets. E1 uses only own history, E2 adds cross-commodity variables, E3 adds financial variables and E4 combines all blocks. This structure separates the effect of the algorithm from the effect of information. The evaluation uses strict expanding-window temporal validation, horizons of one, five and twenty observations, the QLIKE, MAE and RMSE losses, Diebold--Mariano tests with the Harvey--Leybourne--Newbold correction and multiple-comparison adjustments, analysis by regimes defined ex ante, and explainability through native importances and SHAP \citep{Wang2024SystemicRiskML,Diachkov2026FinancialStressML}.
 
-The study makes three contributions. First, it provides out-of-sample evidence on forecasting the volatility of local coffee prices in an emerging market characterized by infrequent quotations and long gaps, a setting little explored by a literature concentrated on futures contracts and international indices. Second, it quantifies the incremental value of each information block through controlled ablation experiments rather than merely ranking algorithms. Third, it shows that simple econometric benchmarks remain hard to beat in this setting and that the importance that models assign to financial variables does not translate into predictive gains, a relevant caveat for machine-learning applications in agricultural finance.
+The study makes three contributions to the commodity markets literature. First, it provides out-of-sample evidence on volatility forecasting in thinly traded local spot markets of an emerging economy, characterized by infrequent quotations and long gaps, a setting largely absent from a literature concentrated on futures contracts and international benchmarks. Second, it quantifies, through controlled ablation experiments, how much global commodity and financial information adds to local volatility forecasts, and shows that the value of financial information is regime dependent, which is consistent with an intermittent transmission of financial conditions to local physical markets. Third, it shows that simple econometric benchmarks remain hard to beat in this setting and that the importance assigned by machine-learning models to financial variables does not translate into predictive gains, a relevant caveat for risk managers and for the use of explainability tools in commodity finance.
 
 The remainder of the article is organized as follows. Section~\ref{sec:materials_methods} describes the data, volatility measures, models and validation protocol. Section~\ref{sec:experiments} presents the experiments and their results, organized by research question. Section~\ref{sec:discussion} discusses the results in light of the literature and presents the limitations, and Section~\ref{sec:conclusion} concludes.
 
@@ -425,23 +397,9 @@ The parameters are estimated on the training set of each annual window. The fore
 \label{eq:garch_forecast}
 \end{equation}
 
-\subsubsection{EGARCH}
+As a robustness check, an EGARCH(1,1,1) model~\citep{Nelson1991EGARCH}, which allows asymmetric responses to positive and negative shocks, was estimated under the same protocol, with Monte Carlo forecasts (1,000 paths, seed 42) for \(h>1\). Because of convergence failures in part of the windows, EGARCH is excluded from the primary common support.
 
-To represent possible asymmetric responses to positive and negative shocks, an EGARCH(1,1,1) was estimated \citep{Nelson1991EGARCH}
-
-\begin{equation}
-\ln\left(\sigma_{c,t}^{2}\right)
-=
-\omega
-+\beta\ln\left(\sigma_{c,t-1}^{2}\right)
-+\alpha\left(\lvert z_{c,t-1}\rvert-\mathbb{E}\lvert z_{c,t-1}\rvert\right)
-+\gamma z_{c,t-1}.
-\label{eq:egarch}
-\end{equation}
-
-The parameter \(\gamma\) allows shocks of different signs to have different effects on volatility. For \(h>1\), EGARCH forecasts were obtained by Monte Carlo simulation with 1,000 paths and seed 42. EGARCH was treated as an econometric robustness analysis. The primary comparison and the predictive superiority tests use only forecasts on the common support and exclude EGARCH when its coverage is incomplete.
-
-\subsubsection{Adapted HAR-RV}
+\subsubsection{HAR-RV}
 
 The HAR-RV baseline was implemented as a linear regression of aggregated future volatility on variation measures at daily, weekly and monthly scales \citep{Corsi2009HAR}
 
@@ -468,19 +426,6 @@ Random Forest was included as a \textit{bagging} benchmark. Averaging many trees
 An independent model was fitted for each information set, horizon and target series. This organization prevents the volatility distribution of one market from being used directly to fit another and makes it possible to assess whether the contribution of the features holds at horizons of one, five and twenty periods. Hyperparameters were fixed to control complexity, preserve reproducibility and prevent the limited number of observations per series from favouring excessively deep trees. For Random Forest, we used 100 estimators, a maximum depth of 6 and a minimum of 5 observations per leaf. The number of trees stabilizes the ensemble average, the depth allows moderate-order interactions and the minimum leaf size smooths predictions in regions with few observations.
 
 For the \textit{boosting} models, we used 300 estimators and a learning rate of 0.05. The larger number of steps combined with small updates builds the forecast gradually and reduces reliance on overly aggressive corrections. For XGBoost, the maximum depth was 4, while for LightGBM it was 5. This difference preserves moderate complexity in both cases, given their different growth strategies. For LightGBM, a minimum of 10 observations per leaf was additionally required, which limits the formation of very specific regions. The random state was fixed at 42 in all models. No scaling was applied, since tree decisions depend on split points and not on the numerical distance between variables.
-
-Figure~\ref{fig:tree_ml_workflow} shows the common workflow of the tree-based models. Each algorithm receives the structured feature sets \(E1\)--\(E4\) and is estimated independently, so that performance differences can be attributed to the algorithm or to the information block.
-
-\refstepcounter{figure}
-\begin{center}
-\begin{minipage}{\textwidth}
-\centering
-\includegraphics[width=\textwidth]{figs/ml.png}
-\par\medskip
-\noindent\textbf{Figure~\thefigure.} Workflow of the tree-based machine learning models for local coffee volatility forecasting.
-\end{minipage}
-\end{center}
-\label{fig:tree_ml_workflow}
 
 For each information set \(S\), horizon \(h\) and algorithm \(m\), a function was estimated
 
@@ -650,8 +595,6 @@ G_{F\mid C}=\frac{R_{E2}-R_{E4}}{R_{E2}}.
 
 Positive values indicate a reduction in mean loss and negative values indicate a deterioration of the forecast after the information block is added. The interpretation is predictive, not causal.
 
-The three metrics address complementary dimensions of the research question. QLIKE identifies whether a model adequately estimates risk in variance terms, MAE shows average closeness on the volatility scale and RMSE reveals whether the model fails mainly in large-amplitude episodes. The comparison of E1 with E2, E3 and E4 checks whether the cross-commodity and financial blocks increase predictability beyond local history. Differences across models, horizons and series show whether these gains are stable or depend on the market and period analysed. None of these measures identifies causality, since all of them evaluate out-of-sample predictive ability.
-
 \subsection{Predictive comparison tests}
 \label{subsec:dm_test}
 
@@ -730,12 +673,12 @@ The \(p\)-values are two-sided and computed from a Student \(t\) distribution wi
 
 Because the design produces 891 comparisons, individual significance at 5\% overstates the number of genuine differences. The \(p\)-values were therefore also adjusted with the Holm procedure, which controls the family-wise error rate, and with the Benjamini--Hochberg procedure, which controls the false discovery rate, both applied to the full set of 891 comparisons \citep{Holm1979,BenjaminiHochberg1995}. The QLIKE tests were repeated on the origins with \(Q_{c,t,h}>0\).
 
-The tests bear directly on the objective of identifying incremental information content rather than mere numerical differences in performance. The comparison of E1 with E2, E3 and E4 checks whether adding cross-commodity variables, financial variables or both blocks produces a statistically defensible loss reduction. The comparisons among GARCH, HAR-RV and the tree-based models show whether a configuration has a consistent advantage for a specific metric and horizon. Rejecting the null hypothesis indicates a difference in mean predictive accuracy, but does not establish causality or guarantee superiority in periods or markets outside the analysed sample. The \(p\)-values are therefore interpreted jointly with the magnitude of the gains, the loss function, the horizon and the heterogeneity across markets.
+Rejecting the null hypothesis indicates a difference in mean predictive accuracy but does not establish causality; the \(p\)-values are therefore interpreted jointly with the magnitude of the gains, the loss function and the horizon.
 
 \subsection{Heterogeneity, explainability and reproducibility}
 \label{subsec:additional_analyses}
 
-The empirical analysis is not limited to comparing mean losses across models. Performance may vary between low- and high-volatility periods, the features that drive a forecast need to be identified and the whole procedure must remain auditable. This subsection therefore brings together three complementary analyses. The first examines the heterogeneity of performance across regimes and stress periods. The second examines the relative contribution of variables and information blocks. The third documents the computational environment and the execution rules needed to reproduce the results. Together, these analyses connect predictive accuracy to stability, economic interpretation and the reliability of the pipeline.
+This subsection describes three complementary analyses: performance across volatility regimes and stress periods, the relative contribution of variables and information blocks, and the computational setup required for reproduction.
 
 \subsubsection{Volatility regimes and stress periods}
 \label{subsec:regimes}
@@ -794,29 +737,12 @@ The explainability models are fitted on the valid observations available for eac
 \subsubsection{Implementation and reproducibility}
 \label{subsec:reproducibility}
 
-The master dataset was built in Python 3.12.10. The pipeline used pandas 3.0.5, NumPy 2.5.2, arch 8.0.0, scikit-learn 1.9.0, LightGBM 4.7.0, XGBoost 3.4.1 and shap 0.52.0. Panel construction, baselines, machine-learning experiments, temporal validation, statistical tests, regime analysis and explainability were run in separate scripts, and the results were saved to CSV files for auditing. The individual forecasts record the origin date, the end date of the horizon, the last training date, the cutoff and the validity of the forecast.
-
-Read together, these three analyses answer questions that cannot be resolved by an aggregate metric. The regime decomposition checks whether information and algorithmic gains persist in calm, intermediate and turbulent conditions, and allows comparison with historical shock periods. Explainability identifies which variables and blocks drive the forecasts and helps distinguish a gain associated with local history from a gain associated with commodities or finance. The computational documentation ensures that the choices regarding data, training, validation and evaluation can be audited and reproduced. The set thus complements the central question of incremental predictability with evidence on stability, informational mechanism and reliability of the results. These analyses remain predictive and should not be interpreted as proof of causality.
-
-\subsection{Rationale for the methodological choices}
-\label{subsec:methodological_rationale}
-
-The choice of the local series follows from the audit of coverage, density and consistency. The other local soybean, cotton and cocoa series had gaps, varying units or low frequency incompatible with their use as dependent variables. Arabica and Conilon were therefore kept as targets, and soybean, cotton and cocoa were used as cross-commodity signals. Choosing one variety and one grade per market reduces the heterogeneity caused by differences in classification and unit within the same location.
-
-Using log returns reduces the influence of the nominal price scale and produces a measure comparable across markets. Building \(V_{c,t,h}\) from the next observed returns suits the available data, since it does not attribute intraday granularity to a predominantly daily dataset. Using \(h=1\), \(h=5\) and \(h=20\) makes it possible to distinguish short-term, approximately weekly and approximately monthly forecasts in observation days.
-
-GARCH, EGARCH and HAR-RV form econometric benchmarks with different assumptions about persistence, asymmetry and temporal aggregation. Random Forest, LightGBM and XGBoost extend the comparison to nonlinear relationships and interactions between variables without imposing a parametric functional form. The E1--E4 comparison was chosen to separate the effect of the algorithm from the informational value of the data blocks.
-
-The expanding temporal validation and the purging of labels that reach the test year are necessary because volatility forecasting uses future observations to build the target. Window-specific imputation prevents the later availability of a variable from artificially altering historical training. QLIKE is kept as the central metric because it evaluates forecasts on the variance scale, while MAE and RMSE preserve a direct reading of the error on the volatility scale.
-
-The \textit{ex ante} classification by terciles of historical volatility and the analysis of historical periods show whether performance changes between calm and turbulent conditions using only information available at the origin, which avoids the bias of conditioning the evaluation on the outcome itself. Finally, SHAP and the model importances are used because a predictive gain without an indication of the responsible variables would have limited economic interpretation. Together, these choices keep the analysis aligned with the objective of measuring incremental predictability in local markets integrated with broader agricultural and financial markets.
+The pipeline was run in Python 3.12.10 with pandas 3.0.5, NumPy 2.5.2, arch 8.0.0, scikit-learn 1.9.0, LightGBM 4.7.0, XGBoost 3.4.1 and shap 0.52.0. Panel construction, baselines, machine-learning experiments, temporal validation, statistical tests, regime analysis, explainability and robustness checks were run in separate scripts, and all results were saved to CSV files for auditing. A run manifest records package versions, file hashes and the main parameters. The individual forecasts record the origin date, the end date of the horizon, the last training date, the cutoff and the validity of the forecast. The robustness analyses are run on the saved out-of-sample forecasts, without re-estimating the models.
 
 \section{Experiments and Results}
 \label{sec:experiments}
 
 This section describes the empirical execution of the pipeline and presents, immediately after each element of the design, the corresponding results and discussion. The design was organized to separate three sources of predictive difference. The first is algorithmic flexibility, comparing econometric benchmarks and machine-learning models. The second is information content, comparing the series' own history with cross-commodity and financial blocks. The third is forecast stability, examined by horizon, market, volatility regime and stress period. The experimental unit is the combination of target series, horizon, origin date, information set and model.
-
-The E1--E4 comparison measures whether external sources add information to local history. The comparison between algorithms checks whether nonlinear relationships produce a consistent advantage over the econometric benchmarks. Horizons, markets and regimes show where this advantage persists or disappears. The statistical tests qualify the magnitude of the differences and explainability identifies the blocks associated with the forecasts.
 
 \subsection{Experimental scope and comparison matrix}
 \label{subsec:experimental_scope}
@@ -1135,11 +1061,6 @@ Figure~\ref{fig:feature_importance} pools Arabica and Conilon, which may hide va
 \end{center}
 \label{fig:variety_importance}
 
-\subsection{Reproducibility}
-\label{subsec:results_reproducibility}
-
-The experiment was run in Python 3.12.10 with pandas 3.0.5, NumPy 2.5.2, arch 8.0.0, scikit-learn 1.9.0, LightGBM 4.7.0, XGBoost 3.4.1 and shap 0.52.0. Data construction, baselines, machine-learning models, temporal validation, comparisons, tests, regimes and explainability were kept in separate scripts. The file \texttt{validated\_run\_manifest.json} records the versions, hashes and main parameters. The CSV files for audit, comparison, tests, regimes and feature importance preserve the intermediate results needed for verification. The robustness analyses, which include the QLIKE sensitivity, the multiple-comparison corrections, the \textit{ex ante} regimes and the comparison between the Arabica series, are run by a dedicated script on the saved out-of-sample forecasts, without re-estimating the models.
-
 \section{Discussion}
 \label{sec:discussion}
 
@@ -1159,16 +1080,16 @@ The third is the temporal stability of the relationships. The most important ext
 \subsection{Conditional value of external information}
 \label{subsec:disc_conditional}
 
-The regime results offer a more precise interpretation of the role of financial information. The connectedness literature shows that volatility transmission between commodities and financial markets intensifies during crises and stress periods \citep{Singh2026OilSoftCommoditySpillovers,Zhou2026CommodityConnectedness}. The results of this study are consistent with this evidence at the local scale: financial information harms the forecast when local volatility is low and adds information when it is high. In calm periods, movements in exchange rates, interest rates or stock indices are interpreted by the models as risk signals that do not materialize in local quotations, producing overly volatile forecasts. In turbulent periods, integration between markets increases and these signals come to contain relevant information.
+The regime results offer a more precise interpretation of the role of financial information. The connectedness literature shows that volatility transmission between commodities and financial markets intensifies during crises and stress periods \citep{Singh2026OilSoftCommoditySpillovers,Zhou2026CommodityConnectedness}, and the financialization literature shows that co-movement with financial markets increased mainly for commodities included in investment indices~\citep{TangXiong2012,ChengXiong2014}. Local spot markets for a specific coffee grade are far removed from this channel. The results of this study are consistent with this evidence at the local scale: financial information harms the forecast when local volatility is low and adds information when it is high. In calm periods, movements in exchange rates, interest rates or stock indices are interpreted by the models as risk signals that do not materialize in local quotations, producing overly volatile forecasts. In turbulent periods, integration between markets increases and these signals come to contain relevant information.
 
-Cross-commodity information behaved differently, with small and stable gains across regimes. The most important variables in this block, the CEPEA indicator and the international coffee contract, are directly linked to local price formation. Even so, two markets of the same variety, subject to the same market references, show a correlation of only 0.137 between their returns and simultaneous price changes on only 5.38\% of common dates. This pattern indicates that local quotations incorporate market references with delay and irregularly, which limits the contemporaneous predictive content of external variables. This finding is consistent with evidence that local policies and conditions have limited capacity to contain swings driven by external forces, but also that the transmission of these forces to regional markets is not immediate \citep{Fahmi2023LocalCoffeePolicy,AliagaMiranda2026CoffeeShocks}.
+Cross-commodity information behaved differently, with small and stable gains across regimes. The most important variables in this block, the CEPEA indicator and the international coffee contract, are directly linked to local price formation. Even so, two markets of the same variety, subject to the same market references, show a correlation of only 0.137 between their returns and simultaneous price changes on only 5.38\% of common dates. This pattern indicates that local quotations incorporate market references with delay and irregularly, which limits the contemporaneous predictive content of external variables. This finding is consistent with evidence that local policies and conditions have limited capacity to contain swings driven by external forces, but also that the transmission of these forces to regional markets is not immediate \citep{Fahmi2023LocalCoffeePolicy,AliagaMiranda2026CoffeeShocks}, as emphasized by the spatial price analysis literature~\citep{FacklerGoodwin2001}.
 
 Finally, the stability of GARCH across stress periods contrasts with evidence that traditional GARCH specifications may have limitations in periods of instability \citep{Brun2026GARCHCoffeeRisk}. In the present setting, GARCH's QLIKE advantage held before 2020, during the COVID-19 shock, during the 2021--2022 frost and supply crisis and in the subsequent period. This difference may reflect the fact that the present study evaluates aggregated variance forecasts at short horizons, not extreme-risk measures.
 
 \subsection{Practical implications}
 \label{subsec:disc_practical}
 
-For producers, cooperatives and marketing agents, the results suggest model selection guided by the purpose of the forecast. When the goal is to size risk in variance terms, as in computing margins or value-at-risk measures, GARCH(1,1) offers the most reliable benchmark. When the goal is to anticipate the typical magnitude of price changes, HAR-RV has the lowest errors. Adding external variables to machine-learning models should not be treated as an automatic improvement. Cross-commodity information can be kept for its low cost and marginal gain, while financial information is justified only in periods of high volatility, which suggests combination or selection strategies conditioned on the regime.
+For producers, cooperatives and marketing agents, the results suggest model selection guided by the purpose of the forecast. When the goal is to size risk in variance terms, as in computing margins or value-at-risk measures, GARCH(1,1) offers the most reliable benchmark. When the goal is to anticipate the typical magnitude of price changes, HAR-RV has the lowest errors. Adding external variables to machine-learning models should not be treated as an automatic improvement. Cross-commodity information can be kept for its low cost and marginal gain, while financial information is justified only in periods of high volatility, which suggests combination or selection strategies conditioned on the regime. For policymakers and development lenders, the results caution against importing volatility signals from futures or financial markets into local risk-monitoring systems without regime-specific validation.
 
 \subsection{Limitations}
 \label{subsec:disc_limitations}
@@ -1226,19 +1147,7 @@ These results indicate that, in local agricultural markets with infrequent quota
 %% \appendix
 
 \section*{Data and code availability}
-All series used are public: SEAGRI-BA local quotations, CEPEA indicators, series from the Central Bank of Brazil, Federal Reserve Economic Data and the U.S. Energy Information Administration, and continuous Yahoo Finance contracts. The scripts for data collection, panel construction, estimation, temporal validation, statistical tests, robustness analyses and figures, together with the processed datasets and result files, are available at \url{https://github.com/marcosFigueredo/coffee-volatility-bahia} \textbf{[TO BE COMPLETED: archived DOI]}. The out-of-sample forecast files are regenerated by the estimation scripts.
-
-\section*{Declaration of competing interest}
-\textbf{[TO BE COMPLETED by the authors: declaration of competing interests.]}
-
-\section*{Funding}
-\textbf{[TO BE COMPLETED by the authors: funding agencies and grant numbers, or a statement that no specific funding was received.]}
-
-\section*{CRediT authorship contribution statement}
-\textbf{[TO BE COMPLETED by the authors: CRediT roles of each author, using the \texttt{\textbackslash credit\{\}} command after each \texttt{\textbackslash author}.]}
-
-% To print the credit authorship contribution details
-\printcredits
+All series used are public: SEAGRI-BA local quotations, CEPEA indicators, series from the Central Bank of Brazil, Federal Reserve Economic Data and the U.S. Energy Information Administration, and continuous Yahoo Finance contracts. The scripts for data collection, panel construction, estimation, temporal validation, statistical tests, robustness analyses and figures, together with the processed datasets and result files, are available in a public repository whose link is withheld for double-anonymized review and will be provided upon acceptance.
 
 %% Loading bibliography style file
 %\bibliographystyle{model1-num-names}
